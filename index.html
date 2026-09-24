@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Which Music Style is the Best?</title>
+  <title>Idiomas Movie Night: A Night of Classics</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     * {
@@ -88,9 +88,9 @@
     }
 
     h1 {
-      font-size: 2.2rem;
+      font-size: 1.6rem;
       font-weight: 900;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       background: linear-gradient(90deg, #ff007a, #7b2cbf, #00f0ff);
       -webkit-background-clip: text;
@@ -105,34 +105,43 @@
 
     .grid-container {
       width: 100%;
-      max-width: 500px;
+      max-width: 640px;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
+    }
+    @media (max-width: 520px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+        max-width: 340px;
+      }
     }
     .btn-genre {
       background: rgba(255, 255, 255, 0.04);
       border: 2px solid #ff007a;
       border-radius: 16px;
       color: #ffffff;
-      padding: 24px 15px;
-      font-size: 1.2rem;
+      padding: 12px;
+      font-size: 1.05rem;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 0 15px rgba(255, 0, 122, 0.2);
       transition: all 0.2s ease;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
-    .btn-genre::before {
-      content: '🎵';
-      position: absolute;
-      right: 10px;
-      bottom: 5px;
-      font-size: 1rem;
-      opacity: 0.3;
+    .btn-genre img {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     }
     .btn-genre:hover {
       background: #ff007a;
@@ -192,18 +201,24 @@
   </header>
 
   <div class="title-container">
-    <div class="music-note">🎧</div>
-    <h1>WHICH MUSIC STYLE IS THE BEST?</h1>
-    <p class="subtitle">Vote for your favorite genre!</p>
+    <div class="music-note">🎬</div>
+    <h1>IDIOMAS MOVIE NIGHT: A NIGHT OF CLASSICS</h1>
+    <p class="subtitle">Vote for the movie you want to watch!</p>
   </div>
 
   <div class="grid-container" id="buttonsGrid">
-    <button class="btn-genre" onclick="submitVote('METAL')">METAL</button>
-    <button class="btn-genre" onclick="submitVote('POP')">POP</button>
-    <button class="btn-genre" onclick="submitVote('JAZZ')">JAZZ</button>
-    <button class="btn-genre" onclick="submitVote('HIP-HOP')">HIP-HOP</button>
-    <button class="btn-genre" onclick="submitVote('REGGAE')">REGGAE</button>
-    <button class="btn-genre" onclick="submitVote('GOSPEL')">GOSPEL</button>
+    <button class="btn-genre" onclick="submitVote('GREASE')">
+      <img src="grease.jpg" alt="Grease poster">
+      GREASE
+    </button>
+    <button class="btn-genre" onclick="submitVote('HAIRSPRAY')">
+      <img src="hairspray.webp" alt="Hairspray poster">
+      HAIRSPRAY
+    </button>
+    <button class="btn-genre" onclick="submitVote('BACK TO THE FUTURE')">
+      <img src="backtothefuture.jpg" alt="Back to the Future poster">
+      BACK TO THE FUTURE
+    </button>
   </div>
 
   <div id="statusCard" class="status-card"></div>
@@ -220,7 +235,7 @@
     window.addEventListener("DOMContentLoaded", () => {
       const userVote = localStorage.getItem("voted_genre");
       if (userVote) {
-        disableVoting(`You have already voted for: <strong>${userVote}</strong>. Thank you for participating! 🎶`);
+        disableVoting(`You have already voted for: <strong>${userVote}</strong>. Thank you for participating! 🎬`);
       }
     });
 
