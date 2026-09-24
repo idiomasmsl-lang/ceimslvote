@@ -137,11 +137,17 @@
       gap: 10px;
     }
     .btn-genre img {
+      display: block;
       width: 100%;
-      aspect-ratio: 2 / 3;
+      height: 220px;
       object-fit: cover;
       border-radius: 10px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+    @media (max-width: 520px) {
+      .btn-genre img {
+        height: 300px;
+      }
     }
     .btn-genre:hover {
       background: #ff007a;
@@ -212,7 +218,7 @@
       GREASE
     </button>
     <button class="btn-genre" onclick="submitVote('HAIRSPRAY')">
-      <img src="hairspray.webp" alt="Hairspray poster">
+      <img src="hairspray.jpg" alt="Hairspray poster">
       HAIRSPRAY
     </button>
     <button class="btn-genre" onclick="submitVote('BACK TO THE FUTURE')">
