@@ -214,15 +214,15 @@
 
   <div class="grid-container" id="buttonsGrid">
     <button class="btn-genre" onclick="submitVote('GREASE')">
-      <img src="grease" alt="Grease poster">
+      <img src="grease.jpg" alt="Grease poster">
       GREASE
     </button>
     <button class="btn-genre" onclick="submitVote('HAIRSPRAY')">
-      <img src="hairspray" alt="Hairspray poster">
+      <img src="hairspray.jpg" alt="Hairspray poster">
       HAIRSPRAY
     </button>
     <button class="btn-genre" onclick="submitVote('BACK TO THE FUTURE')">
-      <img src="backtothefuture" alt="Back to the Future poster">
+      <img src="backtothefuture.jpg" alt="Back to the Future poster">
       BACK TO THE FUTURE
     </button>
   </div>
@@ -235,11 +235,17 @@
     // =========================================================
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysIL6x476v-ydbOitMFz3lixSsgslf6xm_kfWM8eOcee5WOXdWzNRYkJ5wk9L762ai/exec";
 
+    // VOTE_LOCK_KEY controls who's allowed to vote again.
+    // To reopen voting for EVERYONE (even those who already voted), just bump the version
+    // number below (e.g. "voted_genre_v1" -> "voted_genre_v2") and redeploy. Old votes stored
+    // in students' browsers become irrelevant since the code stops checking that old key.
+    const VOTE_LOCK_KEY = "voted_genre_v1";
+
     const statusCard = document.getElementById("statusCard");
     const buttons = document.querySelectorAll(".btn-genre");
 
     window.addEventListener("DOMContentLoaded", () => {
-      const userVote = localStorage.getItem("voted_genre");
+      const userVote = localStorage.getItem(VOTE_LOCK_KEY);
       if (userVote) {
         disableVoting(`You have already voted for: <strong>${userVote}</strong>. Thank you for participating! 🎬`);
       }
@@ -251,8 +257,29 @@
       statusCard.innerHTML = message;
     }
 
+    // Hidden staff-only reset: tap the equalizer icon 5 times quickly, then enter the admin password.
+    // Keep this password in sync with ADMIN_PASSWORD in admin.html.
+    const RESET_PASSWORD = "password";
+    let tapCount = 0;
+    let tapTimer = null;
+    document.querySelector(".equalizer").addEventListener("click", () => {
+      tapCount++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => { tapCount = 0; }, 1500);
+      if (tapCount >= 5) {
+        tapCount = 0;
+        const pwd = prompt("Staff password to reset this device's vote:");
+        if (pwd === RESET_PASSWORD) {
+          localStorage.removeItem(VOTE_LOCK_KEY);
+          location.reload();
+        } else if (pwd !== null) {
+          alert("Incorrect password.");
+        }
+      }
+    });
+
     async function submitVote(genre) {
-      if (localStorage.getItem("voted_genre")) return;
+      if (localStorage.getItem(VOTE_LOCK_KEY)) return;
 
       buttons.forEach(btn => btn.disabled = true);
       statusCard.className = "status-card active";
@@ -263,7 +290,7 @@
         const data = await response.json();
 
         if (data.status === "success") {
-          localStorage.setItem("voted_genre", genre);
+          localStorage.setItem(VOTE_LOCK_KEY, genre);
           disableVoting(`Vote for <strong>${genre}</strong> submitted successfully! 🎉`);
         } else {
           throw new Error("Submission error");
